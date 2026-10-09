@@ -121,7 +121,7 @@ danger_confirm() {
   printf "  Target instalasi  : ${BOLD}%s${NC}\n" "$target"
   printf "  Disk              : ${RED}seluruh isi akan dihapus${NC}\n"
   printf "  Downtime          : server tidak bisa diakses 10–40 menit\n"
-  printf "  Console           : siapkan akses VNC dari panel UpCloud\n"
+  printf "  Console           : siapkan akses VNC/Console dari panel cloud kamu\n"
   printf "  RDP setelah selesai: ${CYAN}%s${NC}\n" "$SERVER_IP"
   printf "\n"
   hint "Pastikan kamu sudah backup semua data penting."
@@ -137,14 +137,14 @@ danger_confirm() {
 # ================================================================
 install_windows() {
   local version="$1"
-  local os_name win_ver
-  win_ver="$version"
+  local os_name image_name
 
+  # --image-name adalah syntax yang benar untuk reinstall.sh bin456789
   case "$version" in
-    "10")   os_name="Windows 10 Pro"      ;;
-    "11")   os_name="Windows 11 Pro"      ;;
-    "2022") os_name="Windows Server 2022" ;;
-    "2019") os_name="Windows Server 2019" ;;
+    "10")   os_name="Windows 10 Pro";      image_name="Windows 10 Pro" ;;
+    "11")   os_name="Windows 11 Pro";      image_name="Windows 11 Pro" ;;
+    "2022") os_name="Windows Server 2022"; image_name="Windows Server 2022 SERVERDATACENTER" ;;
+    "2019") os_name="Windows Server 2019"; image_name="Windows Server 2019 SERVERDATACENTER" ;;
   esac
 
   danger_confirm "$os_name"
@@ -178,8 +178,7 @@ install_windows() {
   printf "\n"
 
   bash /tmp/reinstall.sh windows \
-    --version "$win_ver" \
-    --lang "en-us" \
+    --image-name "$image_name" \
     --password "$WIN_PASS"
 
   _summary_windows "$os_name" "$WIN_PASS"
@@ -199,7 +198,7 @@ _summary_windows() {
   label "Password" "$pass"
   printf "\n"
   hint "Tunggu 20–40 menit, lalu buka mstsc dan masukkan IP di atas."
-  hint "Buka port 3389 di firewall panel UpCloud jika belum."
+  hint "Buka port 3389 di firewall panel cloud kamu jika belum."
   printf "\n"
 }
 
@@ -327,7 +326,7 @@ EOF
   label "Password" "(yang kamu input tadi)"
   printf "\n"
   hint "Koneksi: Win+R  ->  mstsc  ->  masukkan IP"
-  hint "Buka port 3389 di firewall panel UpCloud jika belum."
+  hint "Buka port 3389 di firewall panel cloud kamu jika belum."
   printf "\n"
 }
 
